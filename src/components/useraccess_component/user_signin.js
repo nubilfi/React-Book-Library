@@ -75,7 +75,7 @@ class UserSignin extends Component {
 							  </div>
 								{/* button */}
 							  <button type="submit" className="btn btn-sm btn-success">Sign in</button>
-							</form>
+							</form><br/>
 							{/* Form end */}
 							{ 
 								fireRedirect && 
@@ -83,6 +83,7 @@ class UserSignin extends Component {
 									<Redirect to="/"/>
 								)
 							}
+					  	<p>Doesn't have account, Sign up <Link to="/signup">here</Link>.</p>
 					  </div>
 					</div>
 				</div>
