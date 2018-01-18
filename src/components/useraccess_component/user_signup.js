@@ -44,35 +44,46 @@ class UserSignup extends Component {
 
 		return(
 			<div className="container">
-				<div className="col-md-4 col-md-offset-4">
-					<h1>Sign Up</h1>
-					<form onSubmit={this.handleSubmit}>
-						<div className="form-group">
-							<label htmlFor="username">
-								<input 
-									type="text" 
-									className="form-control" 
-									name="username" 
-									placeholder="Username" 
-									value={this.state.username} 
-									onChange={this.handleChange} />
-							</label>
-							<label htmlFor="password">
-								<input type="password" 
-									className="form-control" 
-									name="password" 
-									placeholder="Password" 
-									value={this.state.password} 
-									onChange={this.handleChange} />
-							</label><br/><br/>
-
-							<button type="submit" className="btn btn-primary">Sign Up</button>
-						</div>
-					</form>
-					{
-						fireRedirect &&
-						( <Redirect to="/" />)
-					}
+				<div className="col-md-12">
+			    <div className="panel panel-default">
+					  <div className="panel-heading"><h3 className="panel-title"><strong>Sign Up </strong></h3></div>
+					  <div className="panel-body">
+				    	{/* Form start */}
+					    <form role="form" onSubmit={this.handleSubmit}>
+					    	{/* Text input*/}
+							  <div className="form-group">
+							    <label htmlFor="username">Username</label>
+									<input 
+										type="text" 
+										className="form-control" 
+										name="username" 
+										placeholder="Username"
+										value={this.state.username} 
+										onChange={this.handleChange} />
+							  </div>
+							  {/* Text input*/}
+							  <div className="form-group">
+							    <label htmlFor="password">Password</label>
+									<input 
+										type="password" 
+										className="form-control" 
+										name="password" 
+										placeholder="Password"
+										value={this.state.password} 
+										onChange={this.handleChange} />
+							  </div>
+								{/* button */}
+							  <button type="submit" className="btn btn-sm btn-success">Sign up</button>
+							</form>
+							{/* Form end */}
+							{ 
+								fireRedirect && 
+								(
+									<Redirect to="/"/>
+								)
+							}
+					  </div>
+					</div>
 				</div>
 			</div>
 		);
