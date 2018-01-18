@@ -24,7 +24,6 @@ const Navbar = (props) => {
               <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span className="glyphicon glyphicon-user"></span> <span className="caret"></span></a>
               <ul className="dropdown-menu">
                 <li><Link to="/signin">Sign In</Link></li>
-                <li><Link to="/signup">Sign Up</Link></li>
               </ul>
             </li>
           </ul>
