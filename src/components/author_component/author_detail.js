@@ -91,7 +91,7 @@ class AuthorDetail extends Component {
 		axios
 			.delete(`${ROOT_URL}/authors/${id}`, { headers: { Authorization }})
 			.then((res) => {
-				this.setState({ fireRedirect: true });
+				this.setState({ fireRedirect: !this.state.fireRedirect });
 			});
 	}
 
