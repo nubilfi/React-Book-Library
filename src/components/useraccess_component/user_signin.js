@@ -50,7 +50,7 @@ class UserSignin extends Component {
 					  <div className="panel-heading"><h3 className="panel-title"><strong>Sign In </strong></h3></div>
 					  <div className="panel-body">
 				    	{/* Form start */}
-					    <form role="form" onSubmit={this.handleSubmit}>
+					    <form onSubmit={this.handleSubmit}>
 					    	{/* Text input*/}
 							  <div className="form-group">
 							    <label htmlFor="username">Username</label>
