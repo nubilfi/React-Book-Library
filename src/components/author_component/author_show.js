@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import ReactPaginate from 'react-paginate';
 import axios from 'axios';
 import _ from 'lodash';
 
@@ -11,20 +12,34 @@ class AuthorShow extends Component {
 		super(props);
 
 		this.state = {
-			dataTable: {}
+			dataTable: {},
+			offset: 0,
+			perPage: 10
 		}
-		this.renderRow = this.renderRow.bind(this);
+		this.renderRow          = this.renderRow.bind(this);
+		this.handlePageClick    = this.handlePageClick.bind(this);
+		this.loadDataFromServer = this.loadDataFromServer.bind(this);
+	}
+
+	loadDataFromServer() {
+		let dataTable, pageCount = null;
+
+		// send state as params to the server
+		axios
+			.get(`${ROOT_URL}/authors`, { 
+				headers: { Authorization },
+				params: { limit: this.state.perPage, offset: this.state.offset }
+			})
+			.then((res) => {
+				// initialize dataTable value & change state
+				dataTable = _.mapKeys(res.data.results, '_id');
+				pageCount = res.data.total ? Math.ceil(res.data.total / res.data.limit) : '';
+				this.setState({ dataTable, pageCount });
+			});		
 	}
 
 	componentDidMount() {
-		let dataTable = null;
-
-		axios
-			.get(`${ROOT_URL}/authors`, { headers: { Authorization }})
-			.then((res) => {
-				dataTable = _.mapKeys(res.data.results, '_id');
-				this.setState({ dataTable });
-			});
+		this.loadDataFromServer();
 	}
 
 	renderRow(author, number) {
@@ -42,8 +57,20 @@ class AuthorShow extends Component {
 		);
 	}
 
+	handlePageClick(data) {
+		// 'selected' is ReactPaginate state (the page number)
+		// start from index 0
+		let selected = data.selected;
+		let offset   = Math.ceil(selected * this.state.perPage);
+
+		// change offset state, then call loadDataFromServer()
+		this.setState({ offset }, () => {
+			this.loadDataFromServer();
+		});
+	}
+
 	render() {
-		const { dataTable } = this.state;
+		const { dataTable, pageCount } = this.state;
 
 		let tableRows = null;
 		if (_.isEmpty(dataTable)) {
@@ -73,6 +100,22 @@ class AuthorShow extends Component {
 						{tableRows}
 					</tbody>
 				</table>
+				{
+					pageCount && 
+					(<ReactPaginate
+						previousLabel={"previous"}
+						nextLabel={"next"}
+						breakLabel={<a href="">...</a>}
+	          breakClassName={"break-me"}
+	          pageCount={this.state.pageCount}
+	          marginPagesDisplayed={2}
+	          pageRangeDisplayed={5}
+	          onPageChange={this.handlePageClick}
+	          containerClassName={"pagination"}
+	          subContainerClassName={"pages pagination"}
+	          activeClassName={"active"}
+						/>)
+				}
 			</div>
 		);
 	}
