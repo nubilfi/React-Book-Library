@@ -66,7 +66,7 @@ class AuthorForm extends Component {
 	render() {
 		const { fullname, email } = this.props.author || {};
 		const { fireRedirect }    = this.state;
-		let handler, title, fullnameField, emailField, formButton;
+		let title, fullnameField, emailField, formButton;
 
 		// when the component has author props, set up the value
 		if (this.props.author) {
