@@ -14,29 +14,41 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { isLoggedIn: false };
+    this.state       = { isLoggedIn: false };
     this.handleLogin = this.handleLogin.bind(this);
   }
 
-  handleLogin(isLoggedIn) {
-    this.setState({ isLoggedIn: isLoggedIn });
+  handleLogin() {
+    this.setState({ isLoggedIn: !this.state.isLoggedIn });
   }
 
   render() {
+    const { isLoggedIn } = this.state;
+
     return (
       <BrowserRouter>
       <div>
         <Navbar isLoggedIn={this.state.isLoggedIn} />
 
-        <Switch>
-          <Route path="/" exact component={Homepage}/>
-          <Route path="/signin" exact component={SignIn}/>
-          <Route path="/signup" exact component={SignUp}/>
-          <Route path="/authors" exact component={AuthorShow}/>
-          <Route path="/authors/create" exact component={AuthorForm}/>
-          <Route path="/authors/:id" exact component={AuthorDetail}/>
-          <Redirect to="/"/>
-        </Switch>
+        {
+          isLoggedIn ?
+            <Switch>
+              <Route path="/" exact component={Homepage}/>
+              <Route path="/signin" exact render={() => <SignIn isLoggedIn={this.handleLogin} />}/>
+              <Route path="/signup" exact render={() => <SignUp isLoggedIn={this.handleLogin} />}/>
+              <Route path="/authors" exact component={AuthorShow}/>
+              <Route path="/authors/create" exact component={AuthorForm}/>
+              <Route path="/authors/:id" exact component={AuthorDetail}/>
+              <Redirect to="/"/>
+            </Switch>
+          :
+          <Switch>
+            <Route path="/" exact component={Homepage}/>
+            <Route path="/signin" exact render={() => <SignIn isLoggedIn={this.handleLogin} />}/>
+            <Route path="/signup" exact render={() => <SignUp isLoggedIn={this.handleLogin} />}/>
+            <Redirect to="/"/>
+          </Switch>          
+        }
       </div>
       </BrowserRouter>
     );
