@@ -14,8 +14,9 @@ class UserSignup extends Component {
 			fireRedirect: false
 		};
 
-		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleChange  = this.handleChange.bind(this);
+		this.handleSubmit  = this.handleSubmit.bind(this);
+		this.handleToLogin = this.handleToLogin.bind(this);
 	}
 
 	handleChange(e) {
@@ -23,6 +24,10 @@ class UserSignup extends Component {
 
 		state[e.target.name] = e.target.value;
 		this.setState(state);
+	}
+
+	handleToLogin() {
+		this.props.isLoggedIn();
 	}
 
 	handleSubmit(e) {
@@ -34,7 +39,7 @@ class UserSignup extends Component {
 			.post(`${ROOT_URL}/signin`, { username, password })
 			.then(res => {
 				if (res.data.success) {
-					this.setState({ fireRedirect: true });
+					this.setState({ fireRedirect: true }, () => { this.handleToLogin() });
 				}
 			});
 	}
