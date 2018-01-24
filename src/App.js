@@ -22,6 +22,13 @@ class App extends Component {
     this.setState({ isLoggedIn: !this.state.isLoggedIn });
   }
 
+  componentDidMount() {
+    const apiKey = localStorage.getItem('apiKey') || null;
+
+    if(apiKey !== null)
+      this.setState({ isLoggedIn: !this.state.isLoggedIn });
+  } 
+
   render() {
     const { isLoggedIn } = this.state;
 
