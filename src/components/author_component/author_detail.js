@@ -5,7 +5,7 @@ import _ from 'lodash';
 
 import AuthorForm from './author_form.js';
 
-const ROOT_URL      = 'https://book-library-api.herokuapp.com/api/v1';
+const ROOT_URL      = 'http://localhost:3001/api/v1';
 
 class AuthorDetail extends Component {
 	constructor(props) {
