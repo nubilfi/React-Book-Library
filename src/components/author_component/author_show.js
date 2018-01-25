@@ -5,13 +5,15 @@ import axios from 'axios';
 import _ from 'lodash';
 
 const ROOT_URL      = 'http://localhost:3001/api/v1';
-const Authorization = localStorage.getItem('apiKey');
 
 class AuthorShow extends Component {
 	constructor(props) {
 		super(props);
 
+		const apiKey = localStorage.getItem('apiKey');
+
 		this.state = {
+			authorization: apiKey,
 			dataTable: {},
 			offset: 0,
 			perPage: 10
@@ -23,6 +25,7 @@ class AuthorShow extends Component {
 
 	loadDataFromServer() {
 		let dataTable, pageCount = null;
+		const Authorization      = this.state.authorization;
 
 		// send state as params to the server
 		axios
