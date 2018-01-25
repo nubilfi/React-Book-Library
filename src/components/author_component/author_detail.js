@@ -5,14 +5,15 @@ import _ from 'lodash';
 
 import AuthorForm from './author_form.js';
 
-const ROOT_URL      = 'http://localhost:3001/api/v1';
-const Authorization = localStorage.getItem('apiKey');
+const ROOT_URL      = 'https://book-library-api.herokuapp.com/api/v1';
 
 class AuthorDetail extends Component {
 	constructor(props) {
 		super(props);
-
+		
+		const apiKey = localStorage.getItem('apiKey') || null;
 		this.state = {
+			authorization: apiKey,
 			author: {},
 			isUpdate: false,
 			fireRedirect: false
@@ -24,8 +25,9 @@ class AuthorDetail extends Component {
 	}
 
 	componentDidMount() {
-		let author   = null;
-		const { id } = this.props.match.params;
+		let author          = null;
+		const { id }        = this.props.match.params;
+		const Authorization = this.state.authorization;
 
 		axios
 			.get(`${ROOT_URL}/authors/${id}`, { headers: { Authorization }})
@@ -86,7 +88,8 @@ class AuthorDetail extends Component {
 	}
 
 	onDelete() {
-		const { id } = this.props.match.params;
+		const { id }        = this.props.match.params;
+		const Authorization = this.state.authorization;
 
 		axios
 			.delete(`${ROOT_URL}/authors/${id}`, { headers: { Authorization }})
