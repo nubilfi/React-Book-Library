@@ -3,13 +3,14 @@ import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 
 const ROOT_URL      = 'http://localhost:3001/api/v1';
-const Authorization = localStorage.getItem('apiKey');
 
 class AuthorForm extends Component {
 	constructor(props) {
 		super(props);
 
+		const apiKey = localStorage.getItem('apiKey');
 		this.state = {
+			authorization: apiKey,
 			author: {
 				fullname: '',
 				email: ''
@@ -31,6 +32,7 @@ class AuthorForm extends Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
+		const Authorization            = this.state.authorization;
 
 		if (this.props.author) {
 			// get form data out of props
