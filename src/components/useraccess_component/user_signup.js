@@ -36,7 +36,7 @@ class UserSignup extends Component {
 		const { username, password } = this.state;
 
 		axios
-			.post(`${ROOT_URL}/signin`, { username, password })
+			.post(`${ROOT_URL}/signup`, { username, password })
 			.then(res => {
 				if (res.data.success) {
 					this.setState({ fireRedirect: true }, () => { this.handleToLogin() });
