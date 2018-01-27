@@ -9,6 +9,9 @@ import SignUp from './components/useraccess_component/user_signup';
 import AuthorShow from './components/author_component/author_show';
 import AuthorForm from './components/author_component/author_form';
 import AuthorDetail from './components/author_component/author_detail';
+import BookShow from './components/book_component/book_show';
+import BookForm from './components/book_component/book_form';
+import BookDetail from './components/book_component/book_detail';
 
 class App extends Component {
   constructor(props) {
@@ -46,6 +49,9 @@ class App extends Component {
               <Route path="/authors" exact component={AuthorShow}/>
               <Route path="/authors/create" exact component={AuthorForm}/>
               <Route path="/authors/:id" exact component={AuthorDetail}/>
+              <Route path="/books" exact component={BookShow}/>
+              <Route path="/books/create" exact component={BookForm}/>
+              <Route path="/books/:id" exact component={BookDetail}/>
               <Redirect to="/"/>
             </Switch>
           :
