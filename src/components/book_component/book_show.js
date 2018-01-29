@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import axios from 'axios';
+import moment from 'moment';
 import _ from 'lodash';
 
 const ROOT_URL      = 'http://localhost:3001/api/v1';
@@ -35,7 +36,7 @@ class BookShow extends Component {
 			})
 			.then((res) => {
 				// initialize dataTable value & change state
-				dataTable = _.mapKeys(res.data.results, '_id');
+				dataTable = res.data.results;
 				pageCount = res.data.total ? Math.ceil(res.data.total / res.data.limit) : '';
 				this.setState({ dataTable, pageCount });
 			});		
@@ -50,9 +51,9 @@ class BookShow extends Component {
 			<tr key={book._id}>
 				<td>{number}</td>
 				<td>{book.title}</td>
-				<td>{book.category}</td>
-				<td>{book.author}</td>
-				<td>{book.published}</td>
+				<td>{book.category.category_name}</td>
+				<td>{book.author.fullname}</td>
+				<td>{moment(book.published).format('DD/MM/YYYY')}</td>
 				<td>{book.pages}</td>
 				<td>
 					<Link className="btn btn-primary btn-xs" to={`/books/${book._id}`}>
@@ -83,7 +84,7 @@ class BookShow extends Component {
 			tableRows = <tr><td colSpan="7">Loading...</td></tr>;
 		} else {
 			let number = 0;
-			tableRows =_.map(this.state.dataTable, (book) => {
+			tableRows  =_.map(dataTable, (book) => {
 				number++;
 				return this.renderRow(book, number);
 			});
