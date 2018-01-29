@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
-
-import SelectCategory from './select_category_component';
-import 'react-select/dist/react-select.css';
+import moment from 'moment';
+import _ from 'lodash';
 
 const ROOT_URL      = 'http://localhost:3001/api/v1';
 
@@ -21,12 +20,37 @@ class BookForm extends Component {
 				published: '',
 				pages: ''
 			},
+			authors: {},
+			categories: {},
+			authorValue: '',
+			categoryValue: '',
 			fireRedirect: false
 		};
 
 		this.handleSubmit      = this.handleSubmit.bind(this);
 		this.handleStateChange = this.handleStateChange.bind(this);
 		this.handleFieldChange = this.handleFieldChange.bind(this);
+	}
+
+	componentDidMount() {
+		let authors, categories = null;
+		const Authorization = this.state.authorization;
+
+		axios
+			.get(`${ROOT_URL}/authors`, { headers: { Authorization }
+			})
+			.then((res) => {
+				// initialize authors value & change state
+				authors = res.data.results;
+				this.setState({ authors });
+				
+				return axios.get(`${ROOT_URL}/categories`, { headers: { Authorization }});
+			})
+			.then((res) => {
+				// initialize categories value & change state
+				categories = res.data.results;
+				this.setState({ categories });				
+			});	
 	}
 
 	handleStateChange(e) {
@@ -73,61 +97,81 @@ class BookForm extends Component {
 
 	render() {
 		const { title, category, author, published, pages } = this.props.book || {};
-		const { fireRedirect }    = this.state;
+		const { fireRedirect, authors, categories, book }   = this.state;
 		let headerTitle, titleField, categoryField, authorField, publishedField, pagesField, formButton;
+
+		let selectAuthor   = [];
+		let selectCategory = [];
+
+		_.map(authors, val => {
+			selectAuthor.push(<option value={val._id} key={val._id}>{val.fullname}</option>);
+		});
+
+		_.map(categories, val => {
+			selectCategory.push(<option value={val._id} key={val._id}>{val.category_name}</option>);
+		});
 
 		// when the component has book props, set up the value
 		if (this.props.book) {
-			headerTitle 				= <h2>Update Book</h2>;
-			titleField = <input name="title" type="text" 
-												className="form-control input-md" 
-			                	value={title}
-			                	onChange={this.handleFieldChange} />;
-    	categoryField 		= <input name="category" type="text" 
-									    	className="form-control input-md" 
-			                	value={category}
-			                	onChange={this.handleFieldChange} />;
-    	authorField 		= <SelectCategory label="Author" author={author} />
-    	publishedField 		= <input name="published" type="text" 
-									    	className="form-control input-md" 
-			                	value={published}
-			                	onChange={this.handleFieldChange} />;
-    	pagesField 		= <input name="pages" type="text" 
-									    	className="form-control input-md" 
-			                	value={pages}
-			                	onChange={this.handleFieldChange} />;
-    	formButton 		= <div className="form-group">
-				                <button className="btn btn-default">Save changes</button>
-				                <button className="btn btn-danger" style={{ marginLeft: 10 }} onClick={this.props.onUpdate}>Cancel</button>
-			                </div>;
+			headerTitle = <h2>Update Book</h2>;
+			titleField  = <input name="title" type="text" 
+										className="form-control input-md" 
+			              value={title}
+			              onChange={this.handleFieldChange} />;
+    	categoryField = <select 
+    									className="form-control"
+    									name="category" 
+    									value={category['_id']} 
+    									onChange={this.handleFieldChange}>{selectCategory}</select>;
+    	authorField = <select 
+    									className="form-control"
+    									name="author" 
+    									value={author['_id']} 
+    									onChange={this.handleFieldChange}>{selectAuthor}</select>;
+    	publishedField 	= <input name="published" type="text" 
+									    		className="form-control input-md" 
+			                		value={moment(published).format('DD/MM/YYYY')}
+			                		onChange={this.handleFieldChange} />;
+    	pagesField 	= <input name="pages" type="text" 
+									   	className="form-control input-md" 
+			               	value={pages}
+			               	onChange={this.handleFieldChange} />;
+    	formButton 	= <div className="form-group">
+				               <button className="btn btn-default">Save changes</button>
+				               <button className="btn btn-danger" style={{ marginLeft: 10 }} onClick={this.props.onUpdate}>Cancel</button>
+			               </div>;
 		} else {
 			// show the empty field and it's state handler
-			headerTitle 				= <h2>New Book</h2>;
-			titleField = <input name="title" type="text" 
-												className="form-control input-md"
-												placeholder="Title" 
-			                	value={this.state.book['title']}
-			                	onChange={this.handleStateChange} />;
-    	categoryField 		= <input name="category" type="text" 
-									    	className="form-control input-md" 
-									    	placeholder="Category"
-			                	value={this.state.book['category']}
-			                	onChange={this.handleStateChange} />;	
-    	authorField 		= <SelectCategory label="Author" />
-    	publishedField 		= <input name="published" type="text" 
+			headerTitle = <h2>New Book</h2>;
+			titleField  = <input name="title" type="text" 
+											className="form-control input-md"
+											placeholder="Title" 
+			               	value={book['title']}
+			               	onChange={this.handleStateChange} />;
+    	categoryField = <select 
+    									className="form-control"
+    									name="category" 
+    									value={book['category']} 
+    									onChange={this.handleStateChange}>{selectCategory}</select>;
+    	authorField = <select 
+    									className="form-control"
+    									name="author" 
+    									value={book['author']} 
+    									onChange={this.handleStateChange}>{selectAuthor}</select>;
+    	publishedField 	= <input name="published" type="text" 
 									    	className="form-control input-md" 
 									    	placeholder="Published"
-			                	value={this.state.book['published']}
+			                	value={book['published']}
 			                	onChange={this.handleStateChange} />;	
-    	pagesField 		= <input name="pages" type="text" 
-									    	className="form-control input-md" 
-									    	placeholder="Pages"
-			                	value={this.state.book['pages']}
-			                	onChange={this.handleStateChange} />;				              
-    	formButton 		= <div className="form-group">
-				                <button className="btn btn-default">Save</button>
-				                <Link className="btn btn-danger" style={{ marginLeft: 10 }} to="/books">Cancel</Link>
-				              </div>;
+    	pagesField 	= <input name="pages" type="text" 
+								    	className="form-control input-md" 
+								    	placeholder="Pages"
+			               	value={book['pages']}
+			               	onChange={this.handleStateChange} />;				              
+    	formButton 	= <div className="form-group">
+				              <button className="btn btn-default">Save</button>
+			                <Link className="btn btn-danger" style={{ marginLeft: 10 }} to="/books">Cancel</Link>
+			              </div>;
 		}
 
 		return(
@@ -145,16 +189,19 @@ class BookForm extends Component {
 	                {titleField}
 	              </div>
 	            </div>
-	            {/* Text input*/}
+	            {/* Select options */}
 	            <div className="col-sm-6 col-md-6 col-lg-12">
 	              <div className="form-group">
-	                <label className="control-label" htmlFor="category">Category</label>
-	                {categoryField}
+	                <label className="control-label" htmlFor="published">Author</label>
+	                {authorField}
 	              </div>
 	            </div>
 	            {/* Select options */}
 	            <div className="col-sm-6 col-md-6 col-lg-12">
-                {authorField}
+	              <div className="form-group">
+	                <label className="control-label" htmlFor="published">Category</label>
+	                {categoryField}
+	              </div>
 	            </div>
 	            {/* Text input*/}
 	            <div className="col-sm-6 col-md-6 col-lg-12">
