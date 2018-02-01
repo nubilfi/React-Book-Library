@@ -12,7 +12,7 @@ npm install
 ## Usage example
 You can run the app by using npm script:
 ```sh
-npm run
+npm start
 ```
 ## Feedback
 I'm new to React, so if you don't mind to help me, you can give me an advice to make my code better.
