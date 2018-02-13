@@ -17,7 +17,8 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state       = { isLoggedIn: false };
+    const apiKey = localStorage.getItem('apiKey');
+    this.state = { isLoggedIn: false, apiKey };
     this.handleLogin = this.handleLogin.bind(this);
   }
 
@@ -26,11 +27,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const apiKey = localStorage.getItem('apiKey') || null;
-
-    if(apiKey !== null)
-      this.setState({ isLoggedIn: !this.state.isLoggedIn });
-  } 
+    if(this.state.apiKey !== null) this.setState({ isLoggedIn: !this.state.isLoggedIn });
+  }
 
   render() {
     const { isLoggedIn } = this.state;
@@ -38,7 +36,7 @@ class App extends Component {
     return (
       <BrowserRouter>
       <div>
-        <Navbar isLoggedIn={this.state.isLoggedIn} />
+        <Navbar isLoggedIn={isLoggedIn} />
 
         {
           isLoggedIn ?
