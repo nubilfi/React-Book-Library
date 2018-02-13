@@ -36,3 +36,17 @@
 .well-title {
     margin-bottom: 40px;
 }
+
+.search-bar {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+@media only screen and (max-width: 768px) {
+    #book-card { /* scrolling card list */
+      max-height: 500px;
+      overflow: hidden;
+      overflow-y: auto;
+      margin-bottom: 25px;
+    }
+}
