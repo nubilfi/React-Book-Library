@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
-import axios from 'axios';
 import moment from 'moment';
-import _ from 'lodash';
 
 const ROOT_URL      = 'http://localhost:3001/api/v1';
 
@@ -20,14 +18,14 @@ class BookForm extends Component {
 				published: '',
 				pages: ''
 			},
-			authors: {},
-			categories: {},
+			authors: [],
+			categories: [],
 			authorValue: '',
 			categoryValue: '',
 			fireRedirect: false
 		};
 
-		this.handleSubmit      = this.handleSubmit.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleStateChange = this.handleStateChange.bind(this);
 		this.handleFieldChange = this.handleFieldChange.bind(this);
 	}
@@ -36,19 +34,20 @@ class BookForm extends Component {
 		let authors, categories = null;
 		const Authorization = this.state.authorization;
 
-		axios
-			.get(`${ROOT_URL}/authors`, { headers: { Authorization }
-			})
-			.then((res) => {
+		
+		fetch(`${ROOT_URL}/authors`, { headers: { Authorization } })
+			.then(res => res.json() )
+			.then((data) => {
 				// initialize authors value & change state
-				authors = res.data.results;
+				authors = data.results;
 				this.setState({ authors });
 				
-				return axios.get(`${ROOT_URL}/categories`, { headers: { Authorization }});
+				return fetch(`${ROOT_URL}/categories`, { headers: { Authorization }});
 			})
-			.then((res) => {
+			.then(res => res.json() )
+			.then((data) => {
 				// initialize categories value & change state
-				categories = res.data.results;
+				categories = data.results;
 				this.setState({ categories });				
 			});	
 	}
@@ -62,29 +61,37 @@ class BookForm extends Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
-		const Authorization            = this.state.authorization;
+		const Authorization = this.state.authorization;
 
 		if (this.props.book) {
 			// get form data out of props
 			const { _id, title, category, author, published, pages } = this.props.book;
 
 			// Use PUT endpoint to update the book data
-			axios
-				.put(`${ROOT_URL}/books/${_id}`, { title, category, author, published, pages }, { headers: { Authorization }})
-				.then((res) => {
-					if (res.data.success) {
-						this.setState({ fireRedirect: true });
-					}
-				});
+			fetch(`${ROOT_URL}/books/${_id}`, {
+				headers: { Authorization, 'Content-Type': 'application/json'  },
+				body: JSON.stringify({ title, category, author, published, pages }), 
+				method: 'PUT'
+			})
+			.then(res => res.json() )
+			.then((data) => {
+				if (data.success) {
+					this.setState({ fireRedirect: true });
+				}
+			});
 		} else {
 			// get form data out of state
 			const { title, category, author, published, pages } = this.state.book;
 
 			// Use POST endpoint to create new book
-			axios
-				.post(`${ROOT_URL}/books`, { title, category, author, published, pages }, { headers: { Authorization }})
-				.then((res) => {
-					if (res.data.success) {
+				fetch(`${ROOT_URL}/books`, {
+					headers: { Authorization, 'Content-Type': 'application/json'  },
+					body: JSON.stringify({ title, category, author, published, pages }),
+					method: 'POST'
+				})
+				.then(res => res.json() )
+				.then((data) => {
+					if (data.success) {
 						this.setState({ fireRedirect: true });
 					}
 				});
@@ -97,18 +104,18 @@ class BookForm extends Component {
 
 	render() {
 		const { title, category, author, published, pages } = this.props.book || {};
-		const { fireRedirect, authors, categories, book }   = this.state;
+		const { fireRedirect, authors, categories, book } = this.state;
 		let headerTitle, titleField, categoryField, authorField, publishedField, pagesField, formButton;
 
-		let selectAuthor   = [];
+		let selectAuthor = [];
 		let selectCategory = [];
 
-		_.map(authors, val => {
-			selectAuthor.push(<option value={val._id} key={val._id}>{val.fullname}</option>);
+		authors.map(val => {
+			return selectAuthor.push(<option value={val._id} key={val._id}>{val.fullname}</option>);
 		});
 
-		_.map(categories, val => {
-			selectCategory.push(<option value={val._id} key={val._id}>{val.category_name}</option>);
+		categories.map(val => {
+			return selectCategory.push(<option value={val._id} key={val._id}>{val.category_name}</option>);
 		});
 
 		// when the component has book props, set up the value
