@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
-import axios from 'axios';
 
-const ROOT_URL      = 'http://localhost:3001/api/v1';
+const ROOT_URL = 'http://localhost:3001/api/v1';
 
 class AuthorForm extends Component {
 	constructor(props) {
@@ -39,25 +38,35 @@ class AuthorForm extends Component {
 			const { _id, fullname, email } = this.props.author;
 
 			// Use PUT endpoint to update the author data
-			axios
-				.put(`${ROOT_URL}/authors/${_id}`, { fullname, email }, { headers: { Authorization }})
-				.then((res) => {
-					if (res.data.success) {
-						this.setState({ fireRedirect: true });
-					}
-				});
+			fetch(`${ROOT_URL}/authors/${_id}`, {
+				headers: { Authorization, 'Content-Type': 'application/json' },
+				body: JSON.stringify({fullname, email}),
+				method: 'PUT'
+			})
+			.then(res => res.json() )
+			.then((data) => {
+				if (data.success) {
+					this.setState({ fireRedirect: true });
+				}
+			})
+			.catch(err => console.error('Error': err));
 		} else {
 			// get form data out of state
 			const { fullname, email } = this.state.author;
 
 			// Use POST endpoint to create new author
-			axios
-				.post(`${ROOT_URL}/authors`, { fullname, email }, { headers: { Authorization }})
-				.then((res) => {
-					if (res.data.success) {
-						this.setState({ fireRedirect: true });
-					}
-				});
+			fetch(`${ROOT_URL}/authors`, {
+				headers: { Authorization, 'Content-Type': 'application/json' },
+				body: JSON.stringify(this.state.author),
+				method: 'POST'
+			})
+			.then(res => res.json() )
+			.then((data) => {
+				if (data.success) {
+					this.setState({ fireRedirect: true });
+				}
+			})
+			.catch(err => console.error('Error': err));
 		}
 	}
 	
