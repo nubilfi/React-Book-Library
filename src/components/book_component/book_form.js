@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import moment from 'moment';
+import DatePicker from 'react-datepicker';
 
-const ROOT_URL      = 'http://localhost:3001/api/v1';
+import 'react-datepicker/dist/react-datepicker.css';
+
+const ROOT_URL = 'http://localhost:3001/api/v1';
 
 class BookForm extends Component {
 	constructor(props) {
@@ -15,7 +18,7 @@ class BookForm extends Component {
 				title: '',
 				category: '',
 				author: '',
-				published: '',
+				published: moment(),
 				pages: ''
 			},
 			authors: [],
@@ -28,6 +31,8 @@ class BookForm extends Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleStateChange = this.handleStateChange.bind(this);
 		this.handleFieldChange = this.handleFieldChange.bind(this);
+		this.handleDateFieldChange = this.handleDateFieldChange.bind(this);
+		this.handleDateChange = this.handleDateChange.bind(this);
 	}
 
 	componentDidMount() {
@@ -56,6 +61,12 @@ class BookForm extends Component {
 		const state = this.state.book;
 
 		state[e.target.name] = e.target.value;
+		this.setState(state);
+	}
+
+	handleDateChange(date) {
+		const state = this.state.book;
+		state['published'] = date;
 		this.setState(state);
 	}
 
@@ -102,6 +113,10 @@ class BookForm extends Component {
 		this.props.onFieldChange(e.target.name, e.target.value);
 	}
 
+	handleDateFieldChange(e) {
+		this.props.onFieldChange('published', e);
+	}
+
 	render() {
 		const { title, category, author, published, pages } = this.props.book || {};
 		const { fireRedirect, authors, categories, book } = this.state;
@@ -135,10 +150,14 @@ class BookForm extends Component {
     									name="author" 
     									value={author['_id']} 
     									onChange={this.handleFieldChange}>{selectAuthor}</select>;
-    	publishedField 	= <input name="published" type="text" 
-									    		className="form-control input-md" 
-			                		value={moment(published).format('DD/MM/YYYY')}
-			                		onChange={this.handleFieldChange} />;
+    	publishedField 	= <DatePicker
+    											className="form-control input-md"
+    											name="published"
+									        selected={moment(published)}
+									        onChange={this.handleDateFieldChange}
+									        dateFormat="DD/MM/YYYY"
+										    />;
+										    <p>this is {published}</p>
     	pagesField 	= <input name="pages" type="text" 
 									   	className="form-control input-md" 
 			               	value={pages}
@@ -165,11 +184,13 @@ class BookForm extends Component {
     									name="author" 
     									value={book['author']} 
     									onChange={this.handleStateChange}>{selectAuthor}</select>;
-    	publishedField 	= <input name="published" type="text" 
-									    	className="form-control input-md" 
-									    	placeholder="Published"
-			                	value={book['published']}
-			                	onChange={this.handleStateChange} />;	
+    	publishedField 	= <DatePicker
+    											className="form-control input-md"
+    											name="published"
+									        selected={book['published']}
+									        onChange={this.handleDateChange}
+									        dateFormat="DD/MM/YYYY"
+										    />;
     	pagesField 	= <input name="pages" type="text" 
 								    	className="form-control input-md" 
 								    	placeholder="Pages"
