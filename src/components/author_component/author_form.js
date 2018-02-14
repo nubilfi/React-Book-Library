@@ -49,7 +49,7 @@ class AuthorForm extends Component {
 					this.setState({ fireRedirect: true });
 				}
 			})
-			.catch(err => console.error('Error': err));
+			.catch(err => console.error('Error: ', err));
 		} else {
 			// Use POST endpoint to create new author
 			fetch(`${ROOT_URL}/authors`, {
@@ -63,7 +63,7 @@ class AuthorForm extends Component {
 					this.setState({ fireRedirect: true });
 				}
 			})
-			.catch(err => console.error('Error': err));
+			.catch(err => console.error('Error: ', err));
 		}
 	}
 	

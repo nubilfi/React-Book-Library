@@ -36,7 +36,8 @@ class AuthorShow extends Component {
 				dataTable = data.results;
 				pageCount = data.total ? Math.ceil(data.total / data.limit) : '';
 				this.setState({ dataTable, pageCount });
-			});		
+			})
+			.catch(err => console.error('Error: ', err));	
 	}
 
 	componentDidMount() {

@@ -54,7 +54,8 @@ class BookForm extends Component {
 				// initialize categories value & change state
 				categories = data.results;
 				this.setState({ categories });				
-			});	
+			})
+			.catch(err => console.error('Error: ', err));	
 	}
 
 	handleStateChange(e) {
@@ -89,7 +90,8 @@ class BookForm extends Component {
 				if (data.success) {
 					this.setState({ fireRedirect: true });
 				}
-			});
+			})
+			.catch(err => console.error('Error: ', err));
 		} else {
 			// get form data out of state
 			const { title, category, author, published, pages } = this.state.book;
@@ -105,7 +107,8 @@ class BookForm extends Component {
 					if (data.success) {
 						this.setState({ fireRedirect: true });
 					}
-				});
+				})
+				.catch(err => console.error('Error: ', err));
 		}
 	}
 	

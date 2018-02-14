@@ -33,7 +33,8 @@ class BookDetail extends Component {
 			.then((data) => {
 				book = data.results;
 				this.setState({ book });
-			});
+			})
+			.catch(err => console.error('Error: ', err));
 	}
 
 	handleChange(field, value) {
@@ -93,7 +94,8 @@ class BookDetail extends Component {
 		})
 		.then((res) => {
 			this.setState({ fireRedirect: !this.state.fireRedirect });
-		});
+		})
+		.catch(err => console.error('Error: ', err));
 	}
 
 	render() {
