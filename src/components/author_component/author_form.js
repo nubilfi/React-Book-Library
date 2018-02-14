@@ -51,9 +51,6 @@ class AuthorForm extends Component {
 			})
 			.catch(err => console.error('Error': err));
 		} else {
-			// get form data out of state
-			const { fullname, email } = this.state.author;
-
 			// Use POST endpoint to create new author
 			fetch(`${ROOT_URL}/authors`, {
 				headers: { Authorization, 'Content-Type': 'application/json' },
