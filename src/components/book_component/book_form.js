@@ -160,7 +160,6 @@ class BookForm extends Component {
 									        onChange={this.handleDateFieldChange}
 									        dateFormat="DD/MM/YYYY"
 										    />;
-										    <p>this is {published}</p>
     	pagesField 	= <input name="pages" type="text" 
 									   	className="form-control input-md" 
 			               	value={pages}
