@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import _ from 'lodash';
 
 import SearchBar from './search_bar';
@@ -21,30 +20,49 @@ class Homepage extends Component {
 	}
 
 	componentDidMount() {
-		axios
-			.get(`${ROOT_URL}/books/display`, {
-				params: { limit: this.state.perPage, offset: this.state.offset }
-			})
-			.then((res) => {
-				// initialize books value & change state
-				let books = res.data.results;
-				let pageCount = res.data.total ? Math.ceil(res.data.total / res.data.limit) : '';
+		let books,
+			pageCount,
+			populer_book;
+		const { perPage, offset } = this.state;
+
+		fetch(`${ROOT_URL}/books/display?limit=${perPage}&offset=${offset}`)
+			.then(res => res.json() )
+			.then((data) => {
+				books = data.results;
+				pageCount = data.total ? Math.ceil(data.total / data.limit) : '';
 				this.setState({ books, pageCount });
-				return axios.get(`${ROOT_URL}/books/populer`);
+
+				return fetch(`${ROOT_URL}/books/populer`);
 			})
-			.then((res) => {
-				let populer_book = res.data.results;
+			.then(res => res.json() )
+			.then((data) => {
+				populer_book = data.results;
 				this.setState({ populer_book });
-			});
+			})
+			.catch(err => console.error('Error: ', err));
 	}
 
 	bookSearch(title) {
-		axios
-			.get(`${ROOT_URL}/books/display/${title}`)
-			.then((res) => {
-				let books = res.data.results;
-				this.setState({ books });
-			});
+		if (title === '') {
+			const { perPage, offset } = this.state;
+			let books;
+			fetch(`${ROOT_URL}/books/display?limit=${perPage}&offset=${offset}`)
+				.then(res => res.json() )
+				.then((data) => {
+					books = data.results;
+					this.setState({ books });
+				})
+				.catch(err => console.error('Error: ', err));
+		} else {
+			let books;
+			fetch(`${ROOT_URL}/books/display/${title}`)
+				.then(res => res.json() )
+				.then((data) => {
+					books = data.results;
+					this.setState({ books });
+				})
+				.catch(err => console.error('Error: ', err));			
+		}
 	}
 
 	render() {
