@@ -23,7 +23,7 @@ class BookCard extends Component {
 								<p className="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque nemo temporibus officiis, sit beatae vitae iste ullam distinctio. Consequatur nam fugit id, debitis magnam alias deserunt enim molestias magni sit.</p>
 								<div className="clearfix">
 									<div className="price pull-left">
-										<button className="btn btn-success">Rate</button>
+										<button className="btn btn-success btn-sm">View</button>
 									</div>
 								</div>
 
