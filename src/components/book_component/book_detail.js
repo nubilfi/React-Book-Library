@@ -13,10 +13,10 @@ class BookDetail extends Component {
 		const apiKey = localStorage.getItem('apiKey') || null;
 		this.state = {
 			authorization: apiKey,
-			book: [],
+			book: {},
 			isUpdate: false,
 			fireRedirect: false
-		}
+		};
 		this.renderDetail = this.renderDetail.bind(this);
 		this.onUpdate = this.onUpdate.bind(this);
 		this.onDelete = this.onDelete.bind(this);
@@ -41,7 +41,7 @@ class BookDetail extends Component {
 		const state = this.state.book;
 		
 		state[field] = value;
-		this.setState({state});
+		this.setState({ state });
 	}
 
 	// Render Book details
@@ -102,7 +102,7 @@ class BookDetail extends Component {
 		const { book, isUpdate, fireRedirect } = this.state;
 
 		let theBook;
-		if (book.length === 0) {
+		if (Object.keys(book).length === 0) {
 			theBook = 'Loading...';
 		} else if(isUpdate) {
 			// set book and methods as props to the BookForm
