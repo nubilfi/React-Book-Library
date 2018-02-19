@@ -12,7 +12,7 @@ class AuthorDetail extends Component {
 		const apiKey = localStorage.getItem('apiKey') || null;
 		this.state = {
 			authorization: apiKey,
-			author: [],
+			author: {},
 			isUpdate: false,
 			fireRedirect: false
 		}
@@ -23,13 +23,15 @@ class AuthorDetail extends Component {
 	}
 
 	componentDidMount() {
+		let author;
 		const { id } = this.props.match.params;
 		const Authorization = this.state.authorization;
 
 		fetch(`${ROOT_URL}/authors/${id}`, { headers: { Authorization }})
 			.then(res => res.json() )
 			.then((data) => {
-				this.setState({ author: [...data.results] });
+				author = data.results;
+				this.setState({ author });
 			})
 			.catch(err => console.error('Error: ', err));
 	}
@@ -96,7 +98,7 @@ class AuthorDetail extends Component {
 		const { author, isUpdate, fireRedirect } = this.state;
 
 		let theAuthor = null;
-		if (author.length === 0) {
+		if (Object.keys(author).length === 0) {
 			theAuthor = 'Loading...';
 		} else if(isUpdate) {
 			// set author and methods as props to the AuthorForm
