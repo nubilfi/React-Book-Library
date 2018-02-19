@@ -23,15 +23,13 @@ class AuthorDetail extends Component {
 	}
 
 	componentDidMount() {
-		let author;
 		const { id } = this.props.match.params;
 		const Authorization = this.state.authorization;
 
 		fetch(`${ROOT_URL}/authors/${id}`, { headers: { Authorization }})
 			.then(res => res.json() )
 			.then((data) => {
-				author = data.results;
-				this.setState({ author });
+				this.setState({ author: [...data.results] });
 			})
 			.catch(err => console.error('Error: ', err));
 	}
@@ -40,7 +38,7 @@ class AuthorDetail extends Component {
 		const state = this.state.author;
 		
 		state[field] = value;
-		this.setState({state});
+		this.setState({ state });
 	}
 
 	// Render Author details
