@@ -22,7 +22,7 @@ class AuthorShow extends Component {
 	}
 
 	loadDataFromServer() {
-		let dataTable, pageCount = null;
+		let	pageCount = null;
 		const Authorization = this.state.authorization;
 		const { perPage, offset } = this.state;
 
@@ -32,10 +32,13 @@ class AuthorShow extends Component {
 			})
 			.then(res => res.json() )
 			.then((data) => {
-				// initialize dataTable value & change state
-				dataTable = data.results;
-				pageCount = data.total ? Math.ceil(data.total / data.limit) : '';
-				this.setState({ dataTable, pageCount });
+				if (data.success) {
+					// initialize dataTable value & change state
+					pageCount = data.total ? Math.ceil(data.total / data.limit) : '';
+					this.setState({ dataTable: [...data.results], pageCount });
+				} else {
+					this.setState({ dataTable: [] });
+				}
 			})
 			.catch(err => console.error('Error: ', err));	
 	}
@@ -74,7 +77,7 @@ class AuthorShow extends Component {
 	render() {
 		const { dataTable, pageCount } = this.state;
 
-		let tableRows = null;
+		let tableRows;
 		if (dataTable.length === 0) {
 			tableRows = <tr><td colSpan="4">Loading...</td></tr>;
 		} else {
