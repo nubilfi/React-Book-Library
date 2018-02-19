@@ -20,24 +20,20 @@ class Homepage extends Component {
 	}
 
 	componentDidMount() {
-		let books,
-			pageCount,
-			populer_book;
+		let pageCount;
 		const { perPage, offset } = this.state;
 
 		fetch(`${ROOT_URL}/books/display?limit=${perPage}&offset=${offset}`)
 			.then(res => res.json() )
 			.then((data) => {
-				books = data.results;
 				pageCount = data.total ? Math.ceil(data.total / data.limit) : '';
-				this.setState({ books, pageCount });
+				this.setState({ books: [...data.results], pageCount });
 
 				return fetch(`${ROOT_URL}/books/populer`);
 			})
 			.then(res => res.json() )
 			.then((data) => {
-				populer_book = data.results;
-				this.setState({ populer_book });
+				this.setState({ populer_book: [...data.results] });
 			})
 			.catch(err => console.error('Error: ', err));
 	}
@@ -45,21 +41,18 @@ class Homepage extends Component {
 	bookSearch(title) {
 		if (title === '') {
 			const { perPage, offset } = this.state;
-			let books;
+
 			fetch(`${ROOT_URL}/books/display?limit=${perPage}&offset=${offset}`)
 				.then(res => res.json() )
 				.then((data) => {
-					books = data.results;
-					this.setState({ books });
+					this.setState({ books: [...data.results] });
 				})
 				.catch(err => console.error('Error: ', err));
 		} else {
-			let books;
 			fetch(`${ROOT_URL}/books/display/${title}`)
 				.then(res => res.json() )
 				.then((data) => {
-					books = data.results;
-					this.setState({ books });
+					this.setState({ books: [...data.results] });
 				})
 				.catch(err => console.error('Error: ', err));			
 		}
