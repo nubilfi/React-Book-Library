@@ -23,7 +23,7 @@ class BookShow extends Component {
 	}
 
 	loadDataFromServer() {
-		let pageCount = null;
+		let dataTable, pageCount = null;
 		const Authorization = this.state.authorization;
 		const { perPage, offset } = this.state;
 
@@ -33,13 +33,10 @@ class BookShow extends Component {
 		})
 		.then(res => res.json() )
 		.then((data) => {
-			if (data.success) {
-				// initialize dataTable value & change state
-				pageCount = data.total ? Math.ceil(data.total / data.limit) : '';
-				this.setState({ dataTable: [...data.results], pageCount });
-			} else {
-				this.setState({ dataTable: [] });
-			}
+			// initialize dataTable value & change state
+			dataTable = data.results;
+			pageCount = data.total ? Math.ceil(data.total / data.limit) : '';
+			this.setState({ dataTable, pageCount });
 		})
 		.catch(err => console.error('Error: ', err));
 	}
