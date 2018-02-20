@@ -19,7 +19,8 @@ class BookForm extends Component {
 				category: '',
 				author: '',
 				published: moment(),
-				pages: ''
+				pages: '',
+				synopsis: ''
 			},
 			authors: [],
 			categories: [],
@@ -77,12 +78,12 @@ class BookForm extends Component {
 
 		if (this.props.book) {
 			// get form data out of props
-			const { _id, title, category, author, published, pages } = this.props.book;
+			const { _id, title, category, author, published, synopsis, pages } = this.props.book;
 
 			// Use PUT endpoint to update the book data
 			fetch(`${ROOT_URL}/books/${_id}`, {
 				headers: { Authorization, 'Content-Type': 'application/json'  },
-				body: JSON.stringify({ title, category, author, published, pages }), 
+				body: JSON.stringify({ title, category, author, published, synopsis, pages }), 
 				method: 'PUT'
 			})
 			.then(res => res.json() )
@@ -94,12 +95,12 @@ class BookForm extends Component {
 			.catch(err => console.error('Error: ', err));
 		} else {
 			// get form data out of state
-			const { title, category, author, published, pages } = this.state.book;
+			const { title, category, author, published, synopsis, pages } = this.state.book;
 
 			// Use POST endpoint to create new book
 				fetch(`${ROOT_URL}/books`, {
 					headers: { Authorization, 'Content-Type': 'application/json'  },
-					body: JSON.stringify({ title, category, author, published, pages }),
+					body: JSON.stringify({ title, category, author, published, synopsis, pages }),
 					method: 'POST'
 				})
 				.then(res => res.json() )
@@ -121,9 +122,9 @@ class BookForm extends Component {
 	}
 
 	render() {
-		const { title, category, author, published, pages } = this.props.book || {};
+		const { title, category, author, published, synopsis, pages } = this.props.book;
 		const { fireRedirect, authors, categories, book } = this.state;
-		let headerTitle, titleField, categoryField, authorField, publishedField, pagesField, formButton;
+		let headerTitle, titleField, categoryField, authorField, publishedField, synopsisField, pagesField, formButton;
 
 		let selectAuthor = [];
 		let selectCategory = [];
@@ -164,6 +165,11 @@ class BookForm extends Component {
 									   	className="form-control input-md" 
 			               	value={pages}
 			               	onChange={this.handleFieldChange} />;
+    	synopsisField 	= <textarea name="synopsis"
+    									className="form-control input-md" 
+    									rows="3"
+			               	value={synopsis}
+			               	onChange={this.handleFieldChange} />;
     	formButton 	= <div className="form-group">
 				               <button className="btn btn-default">Save changes</button>
 				               <button className="btn btn-danger" style={{ marginLeft: 10 }} onClick={this.props.onUpdate}>Cancel</button>
@@ -197,6 +203,12 @@ class BookForm extends Component {
 								    	className="form-control input-md" 
 								    	placeholder="Pages"
 			               	value={book['pages']}
+			               	onChange={this.handleStateChange} />;		
+    	synopsisField 	= <textarea name="synopsis" 
+								    	className="form-control input-md" 
+								    	rows="3"
+								    	placeholder="Synopsis"
+			               	value={book['synopsis']}
 			               	onChange={this.handleStateChange} />;				              
     	formButton 	= <div className="form-group">
 				              <button className="btn btn-default">Save</button>
@@ -245,6 +257,13 @@ class BookForm extends Component {
 	              <div className="form-group">
 	                <label className="control-label" htmlFor="pages">Pages</label>
 	                {pagesField}
+	              </div>
+	            </div>
+	            {/* Textarea*/}
+	            <div className="col-sm-6 col-md-6 col-lg-12">
+	              <div className="form-group">
+	                <label className="control-label" htmlFor="synopsis">Synopsis</label>
+	                {synopsisField}
 	              </div>
 	            </div>
 	            {/* Button */}
