@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import moment from 'moment';
 
 import BookForm from './book_form.js';
@@ -49,7 +49,7 @@ class BookDetail extends Component {
 		return(
 			<div className="col-sm-12 col-md-12">
         <div className="well-block">
-        <Link to="/books">Back</Link><br/><br/>
+        <a onClick={this.props.history.goBack}>Back</a><br/><br/>
           <div className="well-title">
               <h2>{book.title}</h2>
           </div>
@@ -57,7 +57,7 @@ class BookDetail extends Component {
             <div className="feature feature-blurb-text">
               <h4 className="feature-title">Descriptions</h4>
               <div className="feature-content">
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio non reprehenderit est enim corrupti? Similique laboriosam, alias repellendus, vero veritatis doloremque ipsam amet, quam libero itaque aperiam eligendi incidunt ullam.</p>
+                <p>{book.synopsis}</p>
               </div>
             </div>
             <div className="feature feature-blurb-text">
