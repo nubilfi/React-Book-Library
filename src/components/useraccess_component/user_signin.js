@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import axios from 'axios';
 
 const ROOT_URL = 'http://localhost:3001/api/v1';
 
@@ -35,14 +34,18 @@ class UserSignin extends Component {
 
 		const { username, password } = this.state;
 
-		axios
-			.post(`${ROOT_URL}/signin`, { username, password })
-			.then(res => {
-				if (res.data.success) {
-					this.setState({ fireRedirect: true }, () => { this.handleToLogin() });
-					localStorage.setItem('apiKey', res.data.token);
-				}
-			});
+		fetch(`${ROOT_URL}/signin`, {
+			headers: { 'Content-Type': 'application/json'  },
+			body: JSON.stringify({ username, password }), 
+			method: 'POST'
+		})
+		.then(res => res.json() )
+		.then((data) => {
+			if (data.success) {
+				this.setState({ fireRedirect: true }, () => { this.handleToLogin() });
+				localStorage.setItem('apiKey', data.token);
+			}
+		});
 	}
 
 	render() {
