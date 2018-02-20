@@ -12,7 +12,7 @@ const Navbar = ({ isLoggedIn }) => {
             <span className="icon-bar"></span>
             <span className="icon-bar"></span>
           </button>
-          <a className="navbar-brand" href="">Book Library</a>
+          <a className="navbar-brand" href="/">Book Library</a>
         </div>
         <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           { isLoggedIn ? 
@@ -27,7 +27,7 @@ const Navbar = ({ isLoggedIn }) => {
                     <span className="glyphicon glyphicon-user"></span> <span className="caret"></span>
                   </Link>
                   <ul className="dropdown-menu">
-                    <li><Link to="/signout">Sign Out</Link></li>
+                    <li><a href="" onClick={() => { localStorage.removeItem('apiKey'); }}>Sign Out</a></li>
                   </ul>
                 </li>
               </ul>
