@@ -60,3 +60,37 @@
       margin-bottom: 25px;
     }
 }
+
+.input-field {
+  margin-top: 25px;
+}
+
+.input-tags span {
+  background: #eee;
+  border-radius: 3px 0 0 3px;
+  font-weight: bolder;
+  color: #999;
+  display: inline-block;
+  height: 26px;
+  line-height: 26px;
+  padding: 0 20px 0 23px;
+  position: relative;
+  margin: 0 10px 10px 0;
+  text-decoration: none;
+  -webkit-transition: color 0.2s;
+}
+
+.input-tags span:hover {
+  background-color: #0C0C0C;
+  color: white;
+}
+
+.input-tags span > a {
+  text-decoration: none;
+  margin-left: 10px;
+  color: #999;
+}
+
+.input-tags span > a:hover {
+  color: white;
+}
