@@ -46,6 +46,8 @@ class BookDetail extends Component {
 
 	// Render Book details
 	renderDetail(book) {
+		const category = (book.category === null) ? '' : book.category.category_name;
+		const author = (book.author === null) ? '' : book.author.fullname;
 		return(
 			<div className="col-sm-12 col-md-12">
         <div className="well-block">
@@ -63,8 +65,8 @@ class BookDetail extends Component {
             <div className="feature feature-blurb-text">
               <h4 className="feature-title">Details</h4>
               <div className="feature-content">
-                  <p>Author: {book.author.fullname}</p>
-                  <p>Category: {book.category.category_name}</p>
+                  <p>Author: {author}</p>
+                  <p>Category: {category}</p>
                   <p>Published: {moment(book.published).format('DD/MM/YYYY')}</p>
                   <p>Page: {book.pages}</p>
               </div>
