@@ -122,7 +122,7 @@ class BookForm extends Component {
 	}
 
 	render() {
-		const { title, category, author, published, synopsis, pages } = this.props.book;
+		const { title, published, synopsis, pages } = this.props.book || {};
 		const { fireRedirect, authors, categories, book } = this.state;
 		let headerTitle, titleField, categoryField, authorField, publishedField, synopsisField, pagesField, formButton;
 
@@ -138,7 +138,9 @@ class BookForm extends Component {
 		});
 
 		// when the component has book props, set up the value
-		if (this.props.book) {
+		if (this.props.book) {			
+			const category = (this.props.book.category === null) ? '' : this.props.book.category._id;
+			const author = (this.props.book.author === null) ? '' : this.props.book.author._id;
 			headerTitle = <h2>Update Book</h2>;
 			titleField  = <input name="title" type="text" 
 										className="form-control input-md" 
@@ -147,12 +149,12 @@ class BookForm extends Component {
     	categoryField = <select 
     									className="form-control"
     									name="category" 
-    									value={category['_id']} 
+    									value={category} 
     									onChange={this.handleFieldChange}>{selectCategory}</select>;
     	authorField = <select 
     									className="form-control"
     									name="author" 
-    									value={author['_id']} 
+    									value={author} 
     									onChange={this.handleFieldChange}>{selectAuthor}</select>;
     	publishedField 	= <DatePicker
     											className="form-control input-md"
