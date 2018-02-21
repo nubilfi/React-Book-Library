@@ -49,12 +49,14 @@ class BookShow extends Component {
 	}
 
 	renderRow(book, number) {
+		const category = (book.category === null) ? '' : book.category.category_name;
+		const author = (book.author === null) ? '' : book.author.fullname;
 		return(
 			<tr key={book._id}>
 				<td>{number}</td>
 				<td>{book.title}</td>
-				<td>{book.category.category_name}</td>
-				<td>{book.author.fullname}</td>
+				<td>{category}</td>
+				<td>{author}</td>
 				<td>{moment(book.published).format('DD/MM/YYYY')}</td>
 				<td>{book.pages}</td>
 				<td>
