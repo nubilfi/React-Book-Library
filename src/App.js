@@ -12,6 +12,7 @@ import AuthorDetail from './components/author_component/author_detail';
 import BookShow from './components/book_component/book_show';
 import BookForm from './components/book_component/book_form';
 import BookDetail from './components/book_component/book_detail';
+import CategoryShow from './components/category_component/category_show';
 
 class App extends Component {
   constructor(props) {
@@ -50,6 +51,7 @@ class App extends Component {
               <Route path="/books" exact component={BookShow}/>
               <Route path="/books/create" exact component={BookForm}/>
               <Route path="/books/:id" exact component={BookDetail}/>
+              <Route path="/categories" exact component={CategoryShow}/>
               <Redirect to="/"/>
             </Switch>
           :
