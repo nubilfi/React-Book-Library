@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import BookRate from './book_rate';
 
 const ROOT_URL = 'http://localhost:3001/api/v1';
 
@@ -27,12 +28,20 @@ class BookView extends Component {
           <div className="well-title">
             <h2>{synopsis.title}</h2>
           </div>
-					<img src="http://placekitten.com/g/400/200" alt="img" style={{ width: '100%' }}/>
+					<img src="http://placekitten.com/g/400/500" alt="img" style={{ width: '50%' }}/>
           <div className="feature-block">
             <div className="feature feature-blurb-text">
               <h4 className="feature-title">Descriptions</h4>
               <div className="feature-content">
                 <p>{synopsis.synopsis}</p>
+              </div>
+            </div>
+          </div>
+          <div className="feature-block">
+            <div className="feature feature-blurb-text">
+              <h4 className="feature-title">Rate this book</h4>
+              <div className="feature-content">
+				        <BookRate bookid={synopsis._id}/>
               </div>
             </div>
           </div>
