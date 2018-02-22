@@ -94,3 +94,15 @@
 .input-tags span > a:hover {
   color: white;
 }
+
+.react-rater-star {
+  font-size: 30px;
+}
+
+.react-rater-star.will-be-active {
+  color: #FFE300 !important;
+}
+
+.react-rater-star.is-active {
+  color: #FFE300 !important;
+}
